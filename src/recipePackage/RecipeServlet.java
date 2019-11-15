@@ -1,6 +1,7 @@
 package recipePackage;
 
 import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -8,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,6 +40,7 @@ public class RecipeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
 	}
 
 	/**
@@ -47,18 +50,19 @@ public class RecipeServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		String recipes = request.getParameter("yourRecipe");
-		String url = "https://www.food2fork.com/api/search?key=c3ee9156f881ed0fb0321b80ea7039ff&q=";
+		//String url = "https://api.spoonacular.com/recipes/findByIngredients?apiKey=0f4e3ea15e7f4738bf0a2a9666d4a757&ingredients=";
+		String url = "https://api.spoonacular.com/recipes/findByIngredients?apiKey=5270476e47e0417c837da90092609dc2&ingredients=";
 		// Writing Logic
 		ArrayList<String> list = new ArrayList<String>();
 		String[] array = recipes.split(" ");
 		for (int i = 0; i < array.length; i++) {
 			list.add(array[i]);
 		}
-		
 		StringBuilder s = new StringBuilder(url);
 		for (int i = 0; i < list.size(); i++) {
-			s.append(list.get(i) + "%20");
+			s.append(list.get(i) + ",+");
 		}
+		s.append("&number=100");
 		URL obj = new URL(s.toString());
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		// optional default is GET
@@ -69,49 +73,58 @@ public class RecipeServlet extends HttpServlet {
 		int responseCode = con.getResponseCode();
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
-		StringBuffer res = new StringBuffer();
+		StringBuffer responses = new StringBuffer();
 		while ((inputLine = in.readLine()) != null) {
-			res.append(inputLine);
+			System.out.println(inputLine);
+			responses.append(inputLine);
 		}
 		in.close();
-
-		// converting string to json object
-		JSONObject myResponse = new JSONObject(res.toString());
-		// getting the array of recipes from the json object
-		JSONArray arr = myResponse.getJSONArray("recipes");
-		// creating an arraylist to store the object of each recipe
-		ArrayList<JSONObject> innerObject = new ArrayList<>();
-		for (int i = 0; i < arr.length(); i++) {
-			// adding all the recipe objects
-			innerObject.add(arr.getJSONObject(i));
-		}
-		// stroring array to hold all the titles of each recipe
+		JSONArray jsonArr = new JSONArray(responses.toString());
+		
 		ArrayList<String> titles = new ArrayList<String>();
-		for (int i = 0; i < innerObject.size(); i++) {
+		ArrayList<String> images = new ArrayList<String>();
+		ArrayList<Integer> likes = new ArrayList<>();
+		ArrayList<Integer> needIngredients = new ArrayList<>();
+		ArrayList<Integer> recipeIDs = new ArrayList<>();
+		
+		ArrayList<String> strLikes = new ArrayList<String>();
+		ArrayList<JSONArray> missedIngredients = new ArrayList<>();
+		
+		for (int i = 0; i < jsonArr.length(); i++) {
+			JSONObject object = (JSONObject)jsonArr.get(i);
 			// appending title of each recipe to the titles arraylist
-			titles.add(innerObject.get(i).getString("title"));
+			titles.add(object.getString("title"));
+			likes.add(object.getInt("likes"));
+			images.add(object.getString("image"));
+			needIngredients.add(object.getInt("usedIngredientCount"));
+			missedIngredients.add(object.getJSONArray("missedIngredients"));
+			recipeIDs.add(object.getInt("id"));
 		}
+		ArrayList<ArrayList<String>> allIng = new ArrayList<>();
+		for (int i = 0; i < missedIngredients.size(); i++) {
+			ArrayList<String> ing = new ArrayList<>();
+			for (int j = 0; j < missedIngredients.get(i).length(); j++) {
+				JSONObject abc = (JSONObject)missedIngredients.get(i).get(j);
+				ing.add(abc.getString("original"));
+			}
+			allIng.add(ing);
+		}
+		System.out.println();
 		StringBuilder str = new StringBuilder();
 		for (int i = 0; i < titles.size(); i++) {
 			str.append(titles.get(i) + "\n");
 		}
-		PrintWriter writer = response.getWriter();
-		writer.println("" + str.toString() + "");
-		writer.close();
+		String destination = "recipeView.jsp";
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher(destination);
+		request.setAttribute("recipes", titles);
+		request.setAttribute("likes", likes);
+		request.setAttribute("images", images);
+		request.setAttribute("needIngredients", needIngredients);
+		request.setAttribute("IDs", recipeIDs);
+		if (allIng.size() > 0 && allIng != null)
+			request.setAttribute("allIng", allIng);
+		requestDispatcher.forward(request, response);
+		
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
