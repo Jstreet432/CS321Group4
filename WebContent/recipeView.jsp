@@ -1,14 +1,23 @@
 <%@page import="java.util.ArrayList"%> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
+
 <!DOCTYPE html> 
 <html> 
   <head> 
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
-   <title>Recipe List</title> 
+   <title>Recipe List (Results)</title> 
+   <link href="recipeView.css" rel="stylesheet">
   </head> 
+  
   <body> 
-      <center><h1>Recipe List</h1></center> 
-      <table border ="1" width="500" align="center"> 
+	<div class="menu">
+   <a href="info.jsp">Website Information</a><a href="index.jsp">Home</a>
+  	</div>
+
+	<br>
+     <center><h1>Recipe List</h1></center>
+     <br>
+          <table bgcolor="white" border ="1" width="500" style="border:1px solid black;margin-left:auto;margin-right:auto;" style="text-align:center;" style="background-color: #FFFFFF;"> 
          <tr bgcolor="Green"> 
           <th><center><b>Recipe ID</b></center></th> 
           <th><center><b>Image</b></center></th>
@@ -17,10 +26,8 @@
           <th><center><b>More Information</b></center></th>
          </tr> 
 
-        <%ArrayList<String> std =  
-            (ArrayList<String>)request.getAttribute("recipes");
-        ArrayList<Integer> likes =  
-                (ArrayList<Integer>)request.getAttribute("likes");
+        <%ArrayList<String> std = (ArrayList<String>)request.getAttribute("recipes");
+        ArrayList<Integer> likes = (ArrayList<Integer>)request.getAttribute("likes");
         ArrayList<String> images = (ArrayList<String>)request.getAttribute("images");
         ArrayList<Integer> ingredientsNeeded = (ArrayList<Integer>)request.getAttribute("needIngredients");
         ArrayList<ArrayList<String>> allIng = (ArrayList<ArrayList<String>>) request.getAttribute("allIng");
@@ -45,7 +52,10 @@
             </tr> 
             <%i++;%>
             <%}%> 
-        </table>  
-        <hr/> 
+        </table>  <br><br><hr/> 
     </body> 
 </html> 
+
+
+
+    
