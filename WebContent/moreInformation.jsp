@@ -1,4 +1,11 @@
-<%@page import="java.util.ArrayList"%> 
+<%@ page import ="java.net.HttpURLConnection, 
+				java.net.URL, 
+				org.json.JSONArray, 
+				org.json.JSONObject,
+				java.io.BufferedReader,
+				java.io.InputStreamReader,
+				recipePackage.RecipeServlet,
+				java.util.ArrayList" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
 <!DOCTYPE html> 
 <html> 
@@ -15,6 +22,28 @@
   	images = (ArrayList<String>) session.getAttribute("image");
   	ArrayList<String> std = new ArrayList<String>();
     std = (ArrayList<String>)session.getAttribute("title");
+    ArrayList<Integer> ids = new ArrayList<>();
+    ids = (ArrayList<Integer>) session.getAttribute("ID");
+    
+    String url = "https://api.spoonacular.com/recipes/"+ids.get(num-1)+"/analyzedInstructions?apiKey=0f4e3ea15e7f4738bf0a2a9666d4a757";
+	URL obj = new URL(url);
+	HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+	// optional default is GET
+	con.setRequestMethod("GET");
+	// add request header
+	con.setRequestProperty("User-Agent", "Mozilla/5.0");
+	
+	int responseCode = con.getResponseCode();
+	BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+	String inputLine;
+	StringBuffer responses = new StringBuffer();
+	while ((inputLine = in.readLine()) != null) {
+		System.out.println(inputLine);
+		responses.append(inputLine);
+	}
+	in.close();
+	JSONArray jsonArr = new JSONArray(responses.toString());
+	JSONArray stepObj = ((JSONObject)jsonArr.get(0)).getJSONArray("steps");
   %>
   <h1><%=std.get(num-1) %></h1>
   <img src="<%=images.get(num-1)%>" alt="W3Schools.com" style="width:350px;height:350px;">
@@ -22,6 +51,15 @@
   <% for (int i = 0; i < allIng.get(num-1).size(); i++){%>
   	<p><%=allIng.get(num-1).get(i)%></p>
   <%}%>
+  <h2>Steps</h2>
+  <%
+  	String stepsOut = "";
+  	for(int i = 0;i < stepObj.length();i++){
+  		JSONObject currentStep = (JSONObject)stepObj.get(i);
+  		stepsOut += "\t"+currentStep.getInt("number")+") " +currentStep.getString("step")+ "<br/>";
+  	}
+  	out.print(stepsOut);
+  %>
   <h2>Link to Recipe</h2>
   <%String title = std.get(num - 1);
   	String[] titleSplit = title.split(" ");
