@@ -43,7 +43,14 @@
 	}
 	in.close();
 	JSONArray jsonArr = new JSONArray(responses.toString());
-	JSONArray stepObj = ((JSONObject)jsonArr.get(0)).getJSONArray("steps");
+	boolean stepsFound = true;
+	JSONArray stepObj = new JSONArray();
+	try{
+		stepObj = ((JSONObject)jsonArr.get(0)).getJSONArray("steps");
+	}
+	catch(Exception e){
+		stepsFound = false;
+	}
   %>
   <h1><%=std.get(num-1) %></h1>
   <img src="<%=images.get(num-1)%>" alt="W3Schools.com" style="width:350px;height:350px;">
@@ -54,9 +61,14 @@
   <h2>Steps</h2>
   <%
   	String stepsOut = "";
-  	for(int i = 0;i < stepObj.length();i++){
-  		JSONObject currentStep = (JSONObject)stepObj.get(i);
-  		stepsOut += "\t"+currentStep.getInt("number")+") " +currentStep.getString("step")+ "<br/>";
+  	if(stepsFound){
+	  	for(int i = 0;i < stepObj.length();i++){
+	  		JSONObject currentStep = (JSONObject)stepObj.get(i);
+	  		stepsOut += "\t"+currentStep.getInt("number")+") " +currentStep.getString("step")+ "<br/>";
+	  	}
+  	}
+  	else{
+  		stepsOut += "Hmmm we couldn't find the steps for this recipe, try checking the link below.";
   	}
   	out.print(stepsOut);
   %>
