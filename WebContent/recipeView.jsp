@@ -31,9 +31,11 @@
         ArrayList<String> images = (ArrayList<String>)request.getAttribute("images");
         ArrayList<Integer> ingredientsNeeded = (ArrayList<Integer>)request.getAttribute("needIngredients");
         ArrayList<ArrayList<String>> allIng = (ArrayList<ArrayList<String>>) request.getAttribute("allIng");
+        ArrayList<Integer> ids = (ArrayList<Integer>) request.getAttribute("IDs");
        	session.setAttribute("allIng", allIng);
        	session.setAttribute("image", images);
        	session.setAttribute("title", std);
+       	session.setAttribute("ID", ids);
         int i = 1;
         for(int j = 0, k = 0, z = 0, a = 0; j < std.size() && k < likes.size() && z < images.size() && a < ingredientsNeeded.size(); j++, k++, z++, a++){%> 
             <tr> 

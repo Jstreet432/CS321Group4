@@ -29,8 +29,12 @@
   	images = (ArrayList<String>) session.getAttribute("image");
   	ArrayList<String> std = new ArrayList<String>();
     std = (ArrayList<String>)session.getAttribute("title");
+<<<<<<< HEAD
   
     ArrayList<Integer> ids = new ArrayList<Integer>();
+=======
+    ArrayList<Integer> ids = new ArrayList<>();
+>>>>>>> 20d30d63f42e859e485f882666db8ff6352490d8
     ids = (ArrayList<Integer>) session.getAttribute("ID");
     
     String url = "https://api.spoonacular.com/recipes/"+ids.get(num-1)+"/analyzedInstructions?apiKey=0f4e3ea15e7f4738bf0a2a9666d4a757";
@@ -65,9 +69,15 @@
   
   <br><center><font color="white"><b>Ingredients:</b>
   <% for (int i = 0; i < allIng.get(num-1).size(); i++){%>
+<<<<<<< HEAD
   	<p><center><%=allIng.get(num-1).get(i)%></center></p><%}%>
 
   <br><center><font color="white"><b>Instructions:</b></center>
+=======
+  	<p><%=allIng.get(num-1).get(i)%></p>
+  <%}%>
+  <h2>Steps</h2>
+>>>>>>> 20d30d63f42e859e485f882666db8ff6352490d8
   <%
   	String stepsOut = "";
   	if(stepsFound){
@@ -80,9 +90,15 @@
   		stepsOut += "Hmmm we couldn't find the steps for this recipe, try checking the link below.";
   	}
   	out.print(stepsOut);
+<<<<<<< HEAD
   %></font></center>
   
   <br><%String title = std.get(num - 1);
+=======
+  %>
+  <h2>Link to Recipe</h2>
+  <%String title = std.get(num - 1);
+>>>>>>> 20d30d63f42e859e485f882666db8ff6352490d8
   	String[] titleSplit = title.split(" ");
   	StringBuilder str = new StringBuilder();
   	for (int i = 0; i < titleSplit.length; i++){
