@@ -1,79 +1,48 @@
+        
 package recipePackage;
 
-// C:\Users\Megan\Desktop\Java\jdk-13.0.1_windows-x64_bin\jdk-13.0.1\bin
 import java.io.BufferedReader;
 
-
 import java.io.IOException;
-
 import java.io.InputStreamReader;
-
 import java.io.PrintWriter;
-
 import java.net.HttpURLConnection;
-
 import java.net.URL;
-
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-
 import javax.servlet.annotation.WebServlet;
-
 import javax.servlet.http.HttpServlet;
-
 import javax.servlet.http.HttpServletRequest;
-
 import javax.servlet.http.HttpServletResponse;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 /**
-
  * Servlet implementation class RecipeServlet
-
  */
-
 @WebServlet("/recipeServlet")
-
 public class RecipeServlet extends HttpServlet {
-
 	private static final long serialVersionUID = 1L;
-
        
-
     /**
-
      * @see HttpServlet#HttpServlet()
-
      */
-
     public RecipeServlet() {
-
         super();
-
         // TODO Auto-generated constructor stub
-
     }
 
-
 	/**
-
-	* @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-
-	*/
-
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		// TODO Auto-generated method stub
-
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-
+		
 	}
 
 	/**
@@ -124,6 +93,7 @@ public class RecipeServlet extends HttpServlet {
 		ArrayList<String> images = new ArrayList<String>();
 		ArrayList<Integer> likes = new ArrayList<Integer>();
 		ArrayList<Integer> needIngredients = new ArrayList<Integer>();
+		ArrayList<Integer> recipeIDs = new ArrayList<Integer>();
 		
 		ArrayList<String> strLikes = new ArrayList<String>();
 		ArrayList<JSONArray> missedIngredients = new ArrayList<JSONArray>();
@@ -167,6 +137,12 @@ public class RecipeServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			try {
+				recipeIDs.add(object.getInt("id"));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		ArrayList<ArrayList<String>> allIng = new ArrayList<ArrayList<String>>();
 		for (int i = 0; i < missedIngredients.size(); i++) {
@@ -199,11 +175,13 @@ public class RecipeServlet extends HttpServlet {
 		request.setAttribute("likes", likes);
 		request.setAttribute("images", images);
 		request.setAttribute("needIngredients", needIngredients);
+		request.setAttribute("IDs", recipeIDs);
 		if (allIng.size() > 0 && allIng != null)
 			request.setAttribute("allIng", allIng);
 		requestDispatcher.forward(request, response);
-
+		
 	}
 
 }
 
+    

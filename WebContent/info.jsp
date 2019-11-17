@@ -15,8 +15,8 @@
   <div class="container">
 	<div class = "infobox1">
 	<center><font color="white">	<br><b>Reverse Recipes Information</b>
-	<br><br><br>Fall 2019, CS 321-002, Group 4<br><br>Members:<br>Currence, Jeffrey<br>Ngo, Megan<br>Krishnavajjala, Ajay<br>Street, Jeffrey 
-	<br><br><br>Used Spoonacular API to Retrieve Information<br>Hosted on AWS</font></center>
+	<br><br><br>Fall 2019, CS 321-002, Group 4<br><br>Members:<br>Currence, Jeffrey<br>Krishnavajjala, Ajay<br>Ngo, Megan<br>Street, Jeffrey 
+	<br><br><br>Used Spoonacular API to Retrieve Information</font></center>
 	</div></div>
 </body>
 
