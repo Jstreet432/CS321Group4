@@ -21,7 +21,7 @@
    <a href="info.jsp">Website Information</a><a href="index.jsp">Home</a>
 	</div> 
 
- <div class = "container"><div class = "infobox2">
+ <div class = "container"><div class = "infobox2"; >
 <% int num = Integer.parseInt(request.getParameter("hiddenValue"));
   	 ArrayList<ArrayList<String>> allIng = new ArrayList<ArrayList<String>>();
   	 allIng = (ArrayList<ArrayList<String>>) session.getAttribute("allIng");
@@ -82,7 +82,7 @@
   	out.print(stepsOut);
   %>
   
-  <h2>Link to Recipe</h2>
+  </br>
   <%String title = std.get(num - 1);
   	String[] titleSplit = title.split(" ");
   	StringBuilder str = new StringBuilder();
